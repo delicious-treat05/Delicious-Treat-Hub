@@ -1,0 +1,62 @@
+// Menu Items Data
+const menuItems = [
+    { name: "Khichuri with Beef", price: 120 },
+    { name: "Veg Khichuri", price: 80 },
+    { name: "Plain Polao", price: 40 },
+    { name: "Chicken Roast (Gravy, per piece)", price: 80 },
+    { name: "Morog Polao", price: 100 },
+    { name: "Gajorer Borfi (per piece)", price: 15 },
+    { name: "Golap Pitha (per piece)", price: 20 },
+    { name: "Shamuk Pitha (per piece)", price: 20 },
+    { name: "Golap & Shamuk Pitha Combo", price: 350 },
+    { name: "Caramel Egg Pudding", price: 300 }
+];
+
+// DOM Elements
+const menuContainer = document.querySelector(".menu-items");
+const cartContainer = document.getElementById("cart-items");
+const totalCostElement = document.getElementById("total-cost");
+const deliveryCharge = 80;
+
+// State
+let cart = [];
+
+// Render Menu
+menuItems.forEach((item, index) => {
+    const menuItem = document.createElement("div");
+    menuItem.classList.add("item");
+    menuItem.innerHTML = `
+        <h3>${item.name}</h3>
+        <p>${item.price} Tk</p>
+        <button data-index="${index}">Add to Cart</button>
+    `;
+    menuContainer.appendChild(menuItem);
+});
+
+// Add to Cart
+menuContainer.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
+        const itemIndex = e.target.getAttribute("data-index");
+        const selectedItem = menuItems[itemIndex];
+        cart.push(selectedItem);
+        updateCart();
+    }
+});
+
+// Update Cart
+function updateCart() {
+    cartContainer.innerHTML = "";
+    let totalCost = 0;
+
+    cart.forEach((item, index) => {
+        totalCost += item.price;
+        const cartItem = document.createElement("div");
+        cartItem.innerHTML = `
+            <p>${item.name} - ${item.price} Tk</p>
+        `;
+        cartContainer.appendChild(cartItem);
+    });
+
+    totalCost += deliveryCharge;
+    totalCostElement.textContent = totalCost;
+}
